@@ -1,0 +1,105 @@
+#include<iostream>
+#include<vector>
+#include<cstdlib>// --> used for rand fun
+#include<chrono>
+#include<string>
+#include<algorithm>
+#include<climits>
+#include<cmath>
+using namespace std;
+using namespace std::chrono;
+long long maximumpairslow(vector<long long>v)
+{
+    int n = v.size();
+    long long ans = INT_MIN;
+    for(int i = 0; i < n-1;i++)
+    {
+        for (int j = i + 1; j < n;j++){
+            if(v[i]*v[j]>ans)
+            {
+                ans = v[i] * v[j];
+            }
+        }
+    }
+    return ans;
+}
+long long maximumpairfast(vector<long long> v)
+{
+    int n = v.size();
+    int idx1 = 0;
+    for (int i = 0; i < n;i++)
+    {
+        if(v[i]>v[idx1])
+            idx1 = i;
+    }
+    int idx2=0;
+    if(idx1==0)
+      idx2 = 1;
+
+    for (int i = 0; i < n; i++)
+    {
+        if(v[i]>v[idx2]&&i!=idx1)
+            idx2 = i;
+    }
+
+    return v[idx1] * v[idx2];
+}
+int main(){
+    cout << "*** This is a programme to give maximum product of two numbers from an given array of positive elements ***"<<endl;
+
+    cout << "Enter the no of test cases on which you want to run the programme" << endl;
+    int l;
+    cin >> l;
+      while (l--)
+      {
+          int n;
+          n = rand() % 50 + 2;
+          cout << n << endl;
+          vector<long long> arr(n);
+          for (int i = 0; i < n; i++)
+          {
+              arr[i] = rand() % 100000;
+          }
+          for (int i = 0; i < n; i++)
+          {
+              cout << arr[i] << " ";
+          }
+          cout << endl;
+          long long res = maximumpairfast(arr);
+          long long res2 = maximumpairslow(arr);
+          if (res != res2)
+          {
+              cout << "wrong ans for " << res << " " << res2
+                   << endl;
+
+              break;
+          }
+          else
+          {
+              cout << "OK" << endl;
+          }
+
+  }
+  cout << endl
+       << "Test case passed" << endl<<" Enter the size of array"<<endl;
+
+  int n;
+  cin >> n;
+  cout << "enter " << n << " positive elements" << endl;
+  vector<long long> arr(n);
+  for (int i = 0; i < n; i++)
+      cin >> arr[i];
+
+  auto start = high_resolution_clock::now();
+  cout << "Maximum product--> " << maximumpairfast(arr) << endl;
+  
+  auto stop = high_resolution_clock::now();
+
+  cout << endl
+       << "Time taken by programme to exicute " << endl;
+  auto duration = duration_cast<microseconds>(stop - start);
+
+  cout << endl
+       << "Time taken by function: " << duration.count() << " microseconds" << endl;
+  return 0;
+}
